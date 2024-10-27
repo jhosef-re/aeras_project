@@ -37,10 +37,15 @@ int main() {
 			if (seleccionado) {
 				system("CLS");
 				seleccionado = seleccionarRuta();
-			
+
 				if (seleccionado) {
 					system("CLS");
-					obtenerAvionesDisponibles();
+					seleccionado = seleccionarBoletos();
+					if (seleccionado) {
+						system("CLS");
+						initAsientos();
+
+					}
 				}
 
 			}
@@ -54,7 +59,7 @@ int main() {
 			actualizarFecha();
 			break;
 		default:
-			cout << "Selecciona una opcion del menu."  << endl;
+			cout << "Selecciona una opcion del menu." << endl;
 		}
 		system("pause");
 	}
