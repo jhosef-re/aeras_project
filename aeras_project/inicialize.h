@@ -13,5 +13,7 @@ bool existDirectory(const string& path);
 void initLogs();
 void crearCarpetas();
 void verificarOCrearCarpeta(const string& ruta);
+void actualizarFecha();
+void obtenerAvionesDisponibles();
 
 #endif

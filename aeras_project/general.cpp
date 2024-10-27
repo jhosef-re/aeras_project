@@ -15,11 +15,69 @@ using namespace std;
 #define RESET   "\033[0m"       // Reset
 
 
-void displayMenu(const vector<string>& options, string date) {
+int pais = 0;
+int ruta = 0;
+
+
+int leerPais() {
+    return pais;
+}
+
+string getPaisEnLetras(int idPais) {
+    switch (idPais)
+    {
+    case 1:
+        return "GT";
+    case 2:
+        return "MX";
+    case 3:
+        return "PA";
+    default: 
+        return "";
+    }
+}
+
+void cambiarPais(int nuevoValor) {
+    pais = nuevoValor;
+}
+
+int leerRuta() {
+    return ruta;
+}
+
+string getRutaEnLetras() {
+    switch (ruta)
+    {
+    case 1:
+        return "GT-MX";
+    case 2:
+        return "GT-PA";
+    case 3:
+        return "MX-GT";
+    case 4:
+        return "PA-GT";
+    default:
+        return "";
+    }
+}
+
+void cambiarRuta(int nuevoValor) {
+    ruta = nuevoValor;
+}
+
+int obtenerNumeroAleatorio() {
+    random_device rd;
+    mt19937 gen(rd());
+    uniform_int_distribution<> distribucion(1, 2);
+    return distribucion(gen);
+}
+
+void displayMenu(const vector<string>& options, string date, string country, string ruta) {
     system("cls");  
 
     cout << YELLOW;
     cout << "                                       ===================Aeras====================" << endl;
+    cout << "                                                        |" << country << "|"  << ruta << "|" << endl;
     cout << "                                                        "<< date << endl;
     cout << "                                                           MENU" << endl;
     cout << "                                       ============================================" << endl << RESET;

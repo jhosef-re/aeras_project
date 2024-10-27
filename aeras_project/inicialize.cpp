@@ -4,6 +4,10 @@
 #include <fstream>
 #include <ctime>
 #include <string>
+#include <sstream>
+#include <iomanip>
+#include <filesystem> 
+#include <windows.h> 
 
 using namespace std;
 
@@ -134,5 +138,85 @@ void crearCarpetas() {
         string folderName = "AV-" + numero + "-767";
         string fullPath = basePath + folderName;
         verificarOCrearCarpeta(fullPath);
+    }
+}
+
+void actualizarFecha() {
+    ifstream inputFile("C:\\aeras\\currentDate.txt");
+    if (!inputFile) {
+        cerr << "Error al abrir el archivo para lectura." << endl;
+        return;
+    }
+
+    string fechaActual;
+    getline(inputFile, fechaActual);
+    inputFile.close();
+
+    tm fecha = {};
+    istringstream ss(fechaActual);
+    ss >> get_time(&fecha, "%Y-%m-%d");
+
+    if (ss.fail()) {
+        cerr << "Error al analizar la fecha: " << fechaActual << endl;
+        return;
+    }
+
+    fecha.tm_mday += 1; 
+    mktime(&fecha); 
+
+    ofstream outputFile("C:\\aeras\\currentDate.txt");
+    if (!outputFile) {
+        cerr << "Error al abrir el archivo para escritura." << endl;
+        return;
+    }
+
+    outputFile << put_time(&fecha, "%Y-%m-%d") << endl;
+    outputFile.close();
+    
+    cout << "La nueva fecha es: " << put_time(&fecha, "%Y-%m-%d") << endl;
+}
+
+void obtenerAvionesDisponibles() {
+    int contadorAviones = 0;
+    vector<wstring> ubicaciones;
+    WIN32_FIND_DATAW findFileData;
+    HANDLE hFind;
+
+    wstring path = L"C:\\aeras\\*";
+    hFind = FindFirstFileW(path.c_str(), &findFileData);
+
+    if (hFind == INVALID_HANDLE_VALUE) {
+        wcout << L"Error al acceder a la ruta: " << L"C:\\aeras" << endl;
+        return;
+    }
+
+    do {
+        if (findFileData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) {
+            wstring folderName = findFileData.cFileName;
+            if (folderName != L"." && folderName != L"..") {
+                wstring folderPath = L"C:\\aeras\\" + folderName + L"\\currentLocation.txt";
+
+                wifstream inputFile(folderPath);
+                if (inputFile) {
+                    wstring ubicacion;
+                    getline(inputFile, ubicacion);
+                    ubicaciones.push_back(ubicacion);
+                    contadorAviones++;
+                    inputFile.close();
+                }
+                else {
+                    wcout << L"No se pudo abrir el archivo: " << folderPath << endl;
+                }
+            }
+        }
+    } while (FindNextFileW(hFind, &findFileData) != 0);
+
+    FindClose(hFind);
+
+    // Mostrar resultados
+    wcout << L"Número de aviones disponibles: " << contadorAviones << endl;
+    wcout << L"Últimas ubicaciones de los aviones:" << endl;
+    for (const auto& ubicacion : ubicaciones) {
+        wcout << L"- " << ubicacion << endl;
     }
 }
