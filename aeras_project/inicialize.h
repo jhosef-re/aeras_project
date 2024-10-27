@@ -7,6 +7,12 @@
 
 using namespace std;
 
+extern int avDisponibles; 
+extern int avDisponiblesGT;
+extern int avDisponiblesMX;
+extern int avDisponiblesPA;
+
+
 void loadData();
 string getCurrentDate();
 bool existDirectory(const string& path);

@@ -11,6 +11,12 @@
 
 using namespace std;
 
+ int avDisponibles = 14;
+ int avDisponiblesGT = 0;
+ int avDisponiblesMX = 0;
+ int avDisponiblesPA = 0;
+
+
 void loadData() {
     string path = "C:\\aeras";
     bool exist = existDirectory(path);
@@ -18,6 +24,7 @@ void loadData() {
     if (exist) {
         initLogs();
         crearCarpetas();
+        obtenerAvionesDisponibles();
     }
 }
 
@@ -177,7 +184,7 @@ void actualizarFecha() {
 }
 
 void obtenerAvionesDisponibles() {
-    int contadorAviones = 0;
+    int avDisponibles = 0, avDisponiblesGT = 0, avDisponiblesMX = 0, avDisponiblesPA = 0;
     vector<wstring> ubicaciones;
     WIN32_FIND_DATAW findFileData;
     HANDLE hFind;
@@ -200,9 +207,21 @@ void obtenerAvionesDisponibles() {
                 if (inputFile) {
                     wstring ubicacion;
                     getline(inputFile, ubicacion);
-                    ubicaciones.push_back(ubicacion);
-                    contadorAviones++;
                     inputFile.close();
+
+                    if (ubicacion.empty()) {       
+                        avDisponibles++;
+
+                    }
+                    else if (ubicacion == L"1") {
+                        avDisponiblesGT++;
+                    }
+                    else if (ubicacion == L"2") {
+                        avDisponiblesMX++;
+                    }
+                    else if (ubicacion == L"3") {
+                        avDisponiblesPA++;
+                    }
                 }
                 else {
                     wcout << L"No se pudo abrir el archivo: " << folderPath << endl;
@@ -212,11 +231,4 @@ void obtenerAvionesDisponibles() {
     } while (FindNextFileW(hFind, &findFileData) != 0);
 
     FindClose(hFind);
-
-    // Mostrar resultados
-    wcout << L"Número de aviones disponibles: " << contadorAviones << endl;
-    wcout << L"Últimas ubicaciones de los aviones:" << endl;
-    for (const auto& ubicacion : ubicaciones) {
-        wcout << L"- " << ubicacion << endl;
-    }
 }
