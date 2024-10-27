@@ -13,4 +13,5 @@ void initAsientos();
 void mostrarAsientos(bool esPrimeraClase);
 void asignarBoletos();
 bool asignarAsiento(char letra, int fila, bool esPrimeraClase);
+void guardarDistribucionAsientos();
 #endif
