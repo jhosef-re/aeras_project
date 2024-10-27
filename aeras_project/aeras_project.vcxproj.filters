@@ -29,5 +29,8 @@
     <ClInclude Include="general.h">
       <Filter>Source Files</Filter>
     </ClInclude>
+    <ClInclude Include="inicialize.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

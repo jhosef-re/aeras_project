@@ -2,6 +2,8 @@
 #include <iostream>
 #include <thread> 
 #include <chrono>
+#include <fstream>  
+#include <string>
 
 using namespace std;
 
@@ -13,12 +15,13 @@ using namespace std;
 #define RESET   "\033[0m"       // Reset
 
 
-void displayMenu(const vector<string>& options) {
+void displayMenu(const vector<string>& options, string date) {
     system("cls");  
 
     cout << YELLOW;
     cout << "                                       ===================Aeras====================" << endl;
-    cout << "                                                           MENU                    " << endl;
+    cout << "                                                        "<< date << endl;
+    cout << "                                                           MENU" << endl;
     cout << "                                       ============================================" << endl << RESET;
 
     for (size_t i = 0; i < options.size(); ++i) {
@@ -60,7 +63,28 @@ void showProgressBar(int duration) {
 
     for (int i = 0; i <= barWidth; i++) {
         this_thread::sleep_for(chrono::milliseconds(duration * 1000 / barWidth));
-        cout << "=";
+        cout << "*";
     }
     cout << "]" << endl;
+}
+
+
+void openLogs() {
+    system("cls");
+
+    ifstream archivo("C:\\aeras\\logs.txt");
+    if (!archivo.is_open()) {
+        cerr << "Error: No se pudo abrir el archivo " << endl;
+    }
+    else {
+        string contenido, linea;
+        while (getline(archivo, linea)) {
+            contenido += linea + "\n";
+        }
+
+        archivo.close();
+
+        cout << contenido;
+    }
+
 }

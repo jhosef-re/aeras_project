@@ -1,4 +1,6 @@
 #include "general.h"
+#include "inicialize.h"
+
 #include <vector>
 #include <string>
 
@@ -11,27 +13,29 @@ int main() {
 	vector<string> options = {
 	"Seleccionar Aeropuerto",
 	"Ver bitacora",
+	"Pasar al siguiente día"
 	"Ayuda"
 	};
 
+	loadData();
 	displayLogo();
 	showProgressBar(1);
 
-	system("cls");
-
 	while (running) {
-		displayMenu(options);
+		displayMenu(options, getCurrentDate());
 		cin >> choice;
 
 		switch (choice) {
 		case 0:
 			cout << "Bye........" << endl;
+			exit(0);
 			break;
 		case 1:
 			cout << "opt 1." << endl;
 			break;
 		case 2:
-			cout << "opt 2" << endl;
+			system("CLS");
+			openLogs();
 			break;
 		case 3:
 			cout << "opt 3." << endl;

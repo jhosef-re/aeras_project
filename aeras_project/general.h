@@ -7,8 +7,9 @@
 
 using namespace std;
 
-void displayMenu(const vector<string>& options); 
+void displayMenu(const vector<string>& options, string date); 
 void displayLogo();
 void showProgressBar(int duration);
+void openLogs();
 
 #endif
