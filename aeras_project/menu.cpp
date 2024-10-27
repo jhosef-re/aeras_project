@@ -281,55 +281,63 @@ void initAsientos() {
     guardarDistribucionAsientos();
 }
 
+void guardarEnLogs(string correlativoStr) {
+    // Ruta del archivo de logs
+    string rutaLog = "C:\\aeras\\logs.txt";
 
-//void guardarDistribucionAsientos() {
-//    string carpeta = "C:\\aeras\\";
-//
-//    // Determinar el tipo de avión y la carpeta correcta
-//    string tipoAvion = tienePrimeraClase ? "737" : "767";
-//    string correlativo = tienePrimeraClase ?
-//        (boletosPrimeraClase > 0 ? "0" + to_string((boletosPrimeraClase % 10)) : "01") : "01"; // Asegúrate de que se ajuste al rango
-//
-//    string nombreArchivo = getCurrentDate() + "-" + getRutaEnLetras() + ".txt";
-//    string rutaArchivo = carpeta + "AV-" + correlativo + "-" + tipoAvion + "\\" + nombreArchivo;
-//
-//    ofstream archivo(rutaArchivo);
-//    if (!archivo) {
-//        cerr << "Error al crear el archivo: " << rutaArchivo << endl;
-//        return;
-//    }
-//
-//    // Escribir información en el archivo
-//    archivo << "Ruta: " << getRutaEnLetras() << endl;
-//    archivo << "Número de boletos vendidos: " << boletosTotales << endl;
-//    archivo << "Número de boletos en Primera Clase: " << boletosPrimeraClase << endl;
-//    archivo << "*******************************************" << endl;
-//    archivo << "Distribución de Asientos:" << endl;
-//    archivo << "*******************************************" << endl;
-//
-//    if (tienePrimeraClase) {
-//        for (int i = 0; i < filasPrimeraClase; ++i) {
-//            archivo << "Fila " << (i + 1) << ": ";
-//            for (int j = 0; j < columnasPrimeraClase; ++j) {
-//                archivo << (primeraClase[i][j] ? "X" : "O") << " ";
-//            }
-//            archivo << endl;
-//        }
-//    }
-//    else {
-//        for (int i = 0; i < filasEconomicaExtendida; ++i) {
-//            archivo << "Fila " << (i + 1) << ": ";
-//            for (int j = 0; j < 8; ++j) { // Cambia el rango según sea necesario
-//                archivo << (economicaExtendida[i][j] ? "X" : "O") << " ";
-//            }
-//            archivo << endl;
-//        }
-//    }
-//
-//    archivo.close();
-//    cout << "Distribución de asientos guardada en: " << rutaArchivo << endl;
-//}
+    // Abrir el archivo en modo append
+    ofstream logFile(rutaLog, ios::app);
+    if (!logFile) {
+        cerr << "Error al abrir el archivo de logs: " << rutaLog << endl;
+        return;
+    }
 
+    // Guardar la fecha y el correlativo en el log
+    logFile << "********************** " << getCurrentDate() << " - " << correlativoStr << " *******************************" << endl;
+    logFile << "Ruta: " << getRutaEnLetras() << endl;
+    logFile << "Número de boletos vendidos: " << boletosTotales << endl;
+    logFile << "Número de boletos en Primera Clase: " << boletosPrimeraClase << endl;
+    logFile << "*******************************************" << endl;
+    logFile << "Distribución de Asientos:" << endl;
+    logFile << "*******************************************" << endl;
+
+    // Guardar distribución de asientos de Primera Clase
+    if (tienePrimeraClase) {
+        logFile << "Asientos de Primera Clase (6 filas 2x2):" << endl;
+        for (int i = 0; i < filasPrimeraClase; ++i) {
+            logFile << "Fila " << (i + 1) << ": ";
+            for (int j = 0; j < columnasPrimeraClase; ++j) {
+                logFile << (primeraClase[i][j] ? "X" : "O") << " ";
+            }
+            logFile << endl;
+        }
+    }
+
+    // Guardar distribución de asientos de Clase Económica
+    logFile << "Asientos en Clase Económica (20 filas 3x3):" << endl;
+    for (int i = 0; i < filasEconomica; ++i) {
+        logFile << "Fila " << (i + 1) << ": ";
+        for (int j = 0; j < 3; ++j) {
+            logFile << (economica[i][j] ? "X" : "O") << " ";
+        }
+        logFile << endl;
+    }
+
+    // Guardar distribución de asientos de Clase Económica Extendida
+    logFile << "Asientos en Clase Económica Extendida (26 filas 3x2x3):" << endl;
+    for (int i = 0; i < filasEconomicaExtendida; ++i) {
+        logFile << "Fila " << (i + 1) << ": ";
+        for (int j = 0; j < 8; ++j) { // Cambia el rango según sea necesario
+            logFile << (economicaExtendida[i][j] ? "X" : "O") << " ";
+        }
+        logFile << endl;
+    }
+
+    logFile << endl; // Añadir una línea en blanco al final para mejorar la legibilidad
+
+    logFile.close(); // Cerrar el archivo
+    cout << "Información guardada en los logs." << endl;
+}
 
 void guardarDistribucionAsientos() {
     string carpeta = "C:\\aeras\\";
@@ -416,4 +424,5 @@ void guardarDistribucionAsientos() {
 
     archivo.close();
     cout << "Distribución de asientos guardada en: " << rutaArchivo << endl;
+    guardarEnLogs("AV-" + correlativoStr + "-" + tipoAvion);
 }
