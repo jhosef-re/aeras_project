@@ -14,8 +14,7 @@ int main() {
 	vector<string> options = {
 	"Seleccionar Aeropuerto",
 	"Ver bitacora",
-	"Pasar al siguiente día"
-	"Ayuda"
+	"Pasar al siguiente día",
 	};
 
 	loadData();
