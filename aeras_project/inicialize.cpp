@@ -13,6 +13,7 @@ void loadData() {
 
     if (exist) {
         initLogs();
+        crearCarpetas();
     }
 }
 
@@ -83,5 +84,55 @@ void initLogs() {
         else {
             cerr << "Error: No se pudo crear el archivo logs.txt en la ruta: " << "C:\\aeras\\logs.txt" << endl;
         }
+    }
+}
+
+void verificarOCrearCarpeta(const string& ruta) {
+    struct stat info;
+    if (stat(ruta.c_str(), &info) != 0) {
+        if (_mkdir(ruta.c_str()) == 0) {
+            cout << "Carpeta creada: " << ruta << endl;
+        }
+        else {
+            cerr << "Error al crear la carpeta: " << ruta << endl;
+        }
+    }
+    else {
+        cout << "La carpeta ya existe: " << ruta << endl;
+    }
+
+    string rutaArchivo = ruta + "\\currentLocation.txt";
+    ifstream archivo(rutaArchivo);
+    if (!archivo.is_open()) {
+        ofstream archivoNuevo(rutaArchivo);
+        if (archivoNuevo.is_open()) {
+            archivoNuevo.close();
+        }
+        else {
+            cerr << "Error al crear el archivo 'currentLocation.txt' en: " << ruta << endl;
+        }
+    }
+    else {
+        cout << "El archivo 'currentLocation.txt' ya existe en: " << ruta << endl;
+        archivo.close();
+    }
+}
+
+void crearCarpetas() {
+    string basePath = "C:\\aeras\\";
+
+    for (int i = 1; i <= 10; ++i) {
+        string numero = (i < 10 ? "0" : "") + to_string(i);
+        string folderName = "AV-" + numero + "-737";
+        string fullPath = basePath + folderName;
+        verificarOCrearCarpeta(fullPath);
+    }
+
+    for (int i = 1; i <= 4; ++i) {
+        string numero = (i < 10 ? "0" : "") + to_string(i);
+
+        string folderName = "AV-" + numero + "-767";
+        string fullPath = basePath + folderName;
+        verificarOCrearCarpeta(fullPath);
     }
 }
